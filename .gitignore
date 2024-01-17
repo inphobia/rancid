@@ -111,6 +111,7 @@ aeos.pm
 adtran.pm
 arbor.pm
 arcos.pm
+arubaoscx.pm
 avocent.pm
 bigip.pm
 ciscowlc.pm

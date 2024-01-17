@@ -111,6 +111,7 @@ lib/
 	aeos.pm.in	rancid library for Arista Networks EOS.
 	arbor.pm.in	rancid library for Arbor Networks appliances.
 	arcos.pm.in	rancid library for Arrcus Networks ArcOS.
+	arubaoscx.pm.in	rancid library for hpe aruba switches running arubaos-cx.
 	avocent.pm.in	rancid library for Avocent (aka Cyclades).
 	ciscowlc.pm.in	rancid library for some Cisco Wireless Lan Controllers.
 	dell.pm.in	rancid library for some Dell D-Link models.

@@ -132,6 +132,8 @@
 
 	xilogin: adjust to altered arcos banner 
 
+	arubaoscx.pm: add support for hpe aruba switches running arubaos-cx
+
 3.13
 	iosxr.pm: handle power shelves in eXR-lite
 

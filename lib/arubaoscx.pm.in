@@ -1,12 +1,13 @@
 package arubaoscx;
 ##
-## rancid 3.2.99
+## @PACKAGE@ @VERSION@
 #
 #  RANCID - Really Awesome New Cisco confIg Differ
 #
 # arubaoscx.pm - Aruba OSCX switches
 #
 # Contributed by J R Binks <jrbinks+rancid@gmail.com>
+# modified by nick.nauwelaerts@aquafin.be
 #
 # Tested on:
 #
@@ -21,10 +22,7 @@ no warnings 'uninitialized';
 require(Exporter);
 our @ISA = qw(Exporter);
 
-#use rancid 3.13;
-#use rancid 3.2.99;
-use rancid 3.2.99;
-use rancid;
+use rancid @VERSION@;
 
 @ISA = qw(Exporter rancid main);
 
@@ -322,7 +320,3 @@ sub ShowConfiguration {
 }
 
 1;
-
-__END__
-
-
