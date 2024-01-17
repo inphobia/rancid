@@ -82,9 +82,26 @@ arista;command;aeos::ShowExt;show extensions
 arista;command;aeos::DiffConfig;diff startup-config running-config
 #arista;command;aeos::WriteRibd;show tech ribd running
 arista;command;aeos::WriteTerm;show running-config
-
-
-
+#
+# aruba switches by hpe which run arubaos-cx
+# 
+# TODO:
+# check where filter & sort options from rancid.conf should be used
+#
+# add oscfilter to:
+# show system
+# show environment fan
+# show environment temperature
+# show vsf detail
+# show ntp status
+# show lldp neighbor-info
+#
+# cannot validate vsx since i only have 6300's
+# build stack to validate vsf output
+# 
+# cannot validate due to not using feature:
+# show ip ospf *
+# show bgp *
 arubaoscx;script;rancid -t arubaoscx
 arubaoscx;login;clogin
 arubaoscx;module;arubaoscx
@@ -120,7 +137,6 @@ arubaoscx;command;arubaoscx::CommentOutput;show ip ospf statistics
 arubaoscx;command;arubaoscx::CommentOutput;show bgp ipv4 unicast summary
 arubaoscx;command;arubaoscx::CommentOutput;show bgp ipv6 unicast summary
 arubaoscx;command;arubaoscx::ShowConfiguration;show running-config
-
 #
 # AXIS T8504R switch
 # This reportedly resembles Cisco IOS sufficiently that this works.
