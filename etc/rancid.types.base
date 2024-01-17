@@ -82,6 +82,45 @@ arista;command;aeos::ShowExt;show extensions
 arista;command;aeos::DiffConfig;diff startup-config running-config
 #arista;command;aeos::WriteRibd;show tech ribd running
 arista;command;aeos::WriteTerm;show running-config
+
+
+
+arubaoscx;script;rancid -t arubaoscx
+arubaoscx;login;clogin
+arubaoscx;module;arubaoscx
+arubaoscx;inloop;arubaoscx::inloop
+arubaoscx;command;rancid::RunCommand;no page
+# system commands
+arubaoscx;command;arubaoscx::CommentOutput;show system
+arubaoscx;command;arubaoscx::CommentOutput;show version
+arubaoscx;command;arubaoscx::CommentOutput;show images
+# hardware commands
+arubaoscx;command;arubaoscx::CommentOutput;show module
+arubaoscx;command;arubaoscx::CommentOutput;show environment power-supply
+arubaoscx;command;arubaoscx::CommentOutput;show environment power-redundancy
+arubaoscx;command;arubaoscx::CommentOutput;show environment fan
+arubaoscx;command;arubaoscx::CommentOutput;show environment temperature
+arubaoscx;command;arubaoscx::CommentOutput;show environment led
+arubaoscx;command;arubaoscx::CommentOutput;show interface transceiver
+# system state commands
+arubaoscx;command;arubaoscx::CommentOutput;show vsx brief
+arubaoscx;command;arubaoscx::CommentOutput;show vsx status
+arubaoscx;command;arubaoscx::CommentOutput;show vsx config-consistency
+arubaoscx;command;arubaoscx::CommentOutput;show vsx lacp configuration
+arubaoscx;command;arubaoscx::CommentOutput;show vsf
+arubaoscx;command;arubaoscx::CommentOutput;show vsf detail
+arubaoscx;command;arubaoscx::CommentOutput;show vsf link
+arubaoscx;command;arubaoscx::CommentOutput;show vlan
+arubaoscx;command;arubaoscx::CommentOutput;show ntp status
+arubaoscx;command;arubaoscx::CommentOutput;show lldp neighbor-info
+arubaoscx;command;arubaoscx::CommentOutput;show ip ospf
+arubaoscx;command;arubaoscx::CommentOutput;show ip ospf interface
+arubaoscx;command;arubaoscx::CommentOutput;show ip ospf neighbors
+arubaoscx;command;arubaoscx::CommentOutput;show ip ospf statistics
+arubaoscx;command;arubaoscx::CommentOutput;show bgp ipv4 unicast summary
+arubaoscx;command;arubaoscx::CommentOutput;show bgp ipv6 unicast summary
+arubaoscx;command;arubaoscx::ShowConfiguration;show running-config
+
 #
 # AXIS T8504R switch
 # This reportedly resembles Cisco IOS sufficiently that this works.
