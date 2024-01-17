@@ -1,4 +1,90 @@
 3.99.99
+	fnlogin: the license accept prompt at login does not require a \r,
+	which desynchronizes the script from the prompts
+
+	fnlogin: process input line by line to improve prompt matching accuracy
+
+	rancid.types.base: note Transition Networks switches work as ios-sb
+
+	iosxr.pm: fail if show rpl maximum returns file descriptor error
+
+	sros.pm: skip voltage in show chassis power-supply
+
+	sros.pm: rancid.types.base: add show port detail
+
+	aeos.pm: filter frequent timestamp changes of 'debug' directory
+
+	ios.pm: filter (private|startup)-config - Reuben Farrelly
+
+	sros.pm: add show mda detail command
+
+	ios.pm: filter ssd file timestamp
+
+	junos.pm: filter oscillating FIB/RIB/LSP/BGP Peer Scale alarm values and
+	used and needed values from license list for same.
+
+	iosxr.pm: filter nvgen_bkup.log file timestamp
+
+	sros.pm: disable the progress indicator during collection
+
+	sros.pm: filter reversible hash2 keys
+ 
+	iosxr.pm: filter reversible ftp client password
+
+	iosxr.pm rancid.types.base: admin show env all is unreliable, instead
+	use admin show env power for ios-exr
+
+	arbor.pm: fail if system hardware command result is imparsible
+
+	ios.pm: filter flash dir log; snmp etc logs on ASA; fun fact,
+	ASA 9.14 has yet another listing format.
+
+	rancid.types.base: add mikrotik-terse/routeros-verbose for verbose
+	config
+
+	rancid.types.base: add mikrotik-terse/routeros-terse for terse config
+
+	fortigate.pm: GetSystem(): filter AV AI/ML Model
+
+	ios.pm: add RunCommandComment() for cisco-ncs type
+
+	rancid.types.base: add cisco-ncs for ios-xe ncs devices
+
+	iosxr.pm: filter "drbg_instantiate failed" - 7.1.2 CSCvu27946
+
+	arbor.pm: ShowHardware(): fail if command segfaults - 9.1.2
+
+	exos.pm: filter hivemanager password
+
+	junos.pm: filter timestamps from show <*> alarms
+
+	rancid.types.conf: add show system alarms for junipers
+
+	nxos.pm: filter logflahs: icamsql db new in nexos 10.2
+
+	sros.pm: filter new/changed timestamps in configs for 21.10.R1
+
+	mtlogin: change login options to dumb mode to eliminate terminal escape
+	codes - github.com/mathiswolff
+
+	rancid.types.conf: add an example definition for cisco-ucs
+
+	rancid: print error if script is undefined - Per-Olof Olsson
+
+	rancid.conf.sample: fix variable name - Per-Olof Olsson
+
+	nxos.pm: match prompt like "routername(nxos)#" on a UCS with a nexus
+	switch
+
+	arcos.pm: show version also could have a communication failure
+
+	hpuifilter.c: change environ variable name to avoid system lib conflict
+
+	nxos.pm: CSCvz71586 accessing bootflash from multiple VDCs
+	simultaneously might return 0 size bootflash
+
+	rancid.types.base: add paloaltoxml device type to collect xml config
+
 	nslogin: netscalar 13.x may include a prefix to the prompt, eg: "super>"
 
 	hiveos.pm: add support for aerohive hiveos access points

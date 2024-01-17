@@ -120,6 +120,7 @@ sub ShowBOF {
 	ProcessHistory("BOF","","","# $_");
     }
 }
+
 # This routine parses "show card detail"
 sub ShowCardDetail {
     my($INPUT, $OUTPUT, $cmd) = @_;
@@ -180,6 +181,7 @@ sub ShowCardDetail {
 	ProcessHistory("COMMENTS","keysort","E6","# $_");
     }
 }
+
 # This routine parses "show card state"
 sub ShowCardState {
     my($INPUT, $OUTPUT, $cmd) = @_;
@@ -200,6 +202,7 @@ sub ShowCardState {
 	ProcessHistory("COMMENTS","keysort","E5","# $_");
     }
 }
+
 # This routine parses "show chassis"
 sub ShowChassis {
     my($INPUT, $OUTPUT, $cmd) = @_;
@@ -229,12 +232,14 @@ sub ShowChassis {
 	    next;
 	ProcessHistory("COMMENTS","keysort","E1","# $_");
     }
+    ProcessHistory("COMMENTS","keysort","E1","#\n");
 }
+
 # This routine parses "show chassis environment"
 sub ShowChassisEnv {
     my($INPUT, $OUTPUT, $cmd) = @_;
     print STDERR "    In ShowChassisEnv: $_" if ($debug);
-    ProcessHistory("COMMENTS","keysort","E2","#\n# $_");
+    ProcessHistory("COMMENTS","keysort","E3","#\n# $_");
 
 TOP: while (<$INPUT>) {
 	tr/\015//d;
@@ -258,14 +263,15 @@ TOP: while (<$INPUT>) {
 	/speed/i && next;
 
 	/[-=]+$/i && next;
-	ProcessHistory("COMMENTS","keysort","E2","# $_");
+	ProcessHistory("COMMENTS","keysort","E3","# $_");
     }
 }
+
 # This routine parses "show chassis power-supply"
 sub ShowChassisPS {
     my($INPUT, $OUTPUT, $cmd) = @_;
     print STDERR "    In ShowChassisPS: $_" if ($debug);
-    ProcessHistory("COMMENTS","keysort","E3","#\n# $_");
+    ProcessHistory("COMMENTS","keysort","E4","#\n# $_");
 
     while (<$INPUT>) {
 	tr/\015//d;
@@ -280,14 +286,16 @@ sub ShowChassisPS {
 	/^\[[^]]*]$/i && next;
 
 	/[-=]+$/i && next;
-	ProcessHistory("COMMENTS","keysort","E3","# $_");
+	/input voltage/i && next;
+	ProcessHistory("COMMENTS","keysort","E4","# $_");
     }
 }
+
 # This routine parses "show chassis power-management"
 sub ShowChassisPM {
     my($INPUT, $OUTPUT, $cmd) = @_;
     print STDERR "    In ShowChassisPM: $_" if ($debug);
-    ProcessHistory("COMMENTS","keysort","E4","#\n# $_");
+    ProcessHistory("COMMENTS","keysort","E5","#\n# $_");
 
     while (<$INPUT>) {
 	tr/\015//d;
@@ -305,9 +313,10 @@ sub ShowChassisPM {
 	/watts/i && next;
 	/amps/i && next;
 	/[-=]+$/i && next;
-	ProcessHistory("COMMENTS","keysort","E4","# $_");
+	ProcessHistory("COMMENTS","keysort","E5","# $_");
     }
 }
+
 # This routine parses "show debug"
 sub ShowDebug {
     my($INPUT, $OUTPUT, $cmd) = @_;
@@ -329,6 +338,85 @@ sub ShowDebug {
 	ProcessHistory("","","","$_");
     }
 }
+
+# This routine parses "show mda detail"
+sub ShowMDA {
+    my($INPUT, $OUTPUT, $cmd) = @_;
+    print STDERR "    In ShowMDA: $_" if ($debug);
+    ProcessHistory("COMMENTS","keysort","E2","# $_");
+
+TOP: while (<$INPUT>) {
+	tr/\015//d;
+	last if (/^$prompt/);
+	next if (/^(\s*$cmd\s*)$/);
+	next if (/^\s+\^$/);
+	return(-1) if (/error: invalid parameter/i);
+	return(-1) if (/minor: cli command not allowed for this user/i);
+	# context lines
+	/^\[[^]]*]$/i && next;
+	/^$/i && next; # extra blank lines tr doesn't remove
+
+	/[-=]+$/i && next;
+	/Temperature/i && next;
+
+	# trim power info
+	# Hardware Resources (Power-Zone 1)
+	#     Voltage
+	#         Minimum                   :    54.88 Volts  (06/23/2022 15:53:39)
+	#         Current                   :    54.91 Volts 
+	#         Peak                      :    54.95 Volts  (04/28/2022 16:28:34)
+	#     Wattage
+	#         ....
+	#         Max Required              :  2400.00 Watts 
+	#     Amperage
+	#         ....
+	if (/hardware resources .power-zone/i) {
+	    while (<$INPUT>) {
+		tr/\015//d;
+		last TOP if (/^$prompt/);
+		last if (/(^\s*$|^=+)/);
+	    }
+	}
+
+	ProcessHistory("COMMENTS","keysort","E2","# $_");
+    }
+}
+
+# This routine parses "show port detail"
+sub ShowPortDetail {
+    my($INPUT, $OUTPUT, $cmd) = @_;
+    my($text);
+    print STDERR "    In ShowPortDetail: $_" if ($debug);
+    ProcessHistory("COMMENTS","keysort","E6","#\n# $_");
+
+TOP: while (<$INPUT>) {
+	tr/\015//d;
+	last if (/^$prompt/);
+	next if (/^(\s*|\s*$cmd\s*)$/);
+	next if (/^\s+\^$/);
+	return(-1) if (/error: invalid parameter/i);
+	return(-1) if (/minor: cli command not allowed for this user/i);
+	# context lines
+	/^\[[^]]*]$/i && next;
+
+	# accumulate interface name and description; only print if it has a xcvr
+	/^(Interface\s+:\s+\S+)/ && ($text = "# $1\n" . $text);
+	/^(Description\s+:\s+)/ && ($text = "# $_");
+	if (/^transceiver status\s*:\s*/i) {
+	    next TOP if (/not-equipped/);
+	    ProcessHistory("COMMENTS","keysort","E8","$text");
+	    while (<$INPUT>) {
+		tr/\015//d;
+		last TOP if (/^$prompt/);
+		last if (/(^\s*$|^[-=]+)/);
+		ProcessHistory("COMMENTS","keysort","E8","# $_");
+	    }
+	}
+
+	/[-=]+$/i && next;
+    }
+}
+
 # This routine parses "show redundancy synchronization"
 sub ShowRedundancy {
     my($INPUT, $OUTPUT, $cmd) = @_;
@@ -357,6 +445,7 @@ sub ShowRedundancy {
 	ProcessHistory("COMMENTS","keysort","D2","# $_");
     }
 }
+
 # This routine parses "show system information"
 sub ShowSystemInfo {
     my($INPUT, $OUTPUT, $cmd) = @_;
@@ -397,6 +486,7 @@ sub ShowSystemInfo {
 	ProcessHistory("COMMENTS","keysort","C1","# $_");
     }
 }
+
 # This routine parses "admin display-config index"
 sub WriteTermIndex {
     my($INPUT, $OUTPUT, $cmd) = @_;
@@ -414,15 +504,16 @@ sub WriteTermIndex {
 	#/^\[[^]]*]$/i && next;
 
 	/# (timos-|all rights reserved|built on)/i && next;
-	/# Generated /i && next;
+	/# (Generated|Last modified|Last saved) /i && next;
 
 	/^#-+$/i && next;
 	s/echo \"(.*)\"/# $1/i;
 
-	next if (/^# finished \S{3} \S{3} /i);
+	next if (/^# finished /i);
 	ProcessHistory("","","","$_");
     }
 }
+
 # This routine parses "admin display-config"
 sub WriteTerm {
     my($INPUT, $OUTPUT, $cmd) = @_;
@@ -440,7 +531,7 @@ sub WriteTerm {
 	#/^\[[^]]*]$/i && next;
 
 	/# (timos-|all rights reserved|built on)/i && next;
-	/# Generated /i && next;
+	/# (Generated|Last modified|Last saved) /i && next;
 
 	/^#-+$/i && next;
 	s/echo \"(.*)\"/# $1/i;
@@ -470,7 +561,7 @@ sub WriteTerm {
 	}
 
 	# end of config.
-	if (/^# finished \S{3} \S{3} /i) {
+	if (/^# finished /i) {
 	    $found_end = 1;
 	    return(0);
 	}
@@ -528,9 +619,16 @@ sub WriteTermMD {
 		ProcessHistory("","","","$_") && next;
 	    }
 	}
+	if (/^(\s+authentication-key)\s+("\S+"\s+hash2)/) {
+	    if ($filter_pwds >= 1) {
+		ProcessHistory("","","","#$1 <removed>$'") && next;
+	    } else {
+		ProcessHistory("","","","$_") && next;
+	    }
+	}
 
 	# end of config.
-	if ((/^(# finished \S{3} \S{3} |\[\]\s*$)/i) && $linecnt > 5) {
+	if ((/^(# finished |\[\]\s*$)/i) && $linecnt > 5) {
 	    $found_end = 1;
 	    return(0);
 	}

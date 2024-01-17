@@ -13,7 +13,7 @@ AC_INIT(m4_esyscmd(configure.vers package_name),
 	[rancid@shrubbery.net])
 AC_CONFIG_SRCDIR(CHANGES)
 AM_INIT_AUTOMAKE
-COPYYEARS="1997-2019"
+COPYYEARS="1997-2022"
 AC_SUBST(COPYYEARS)
 
 
@@ -44,7 +44,7 @@ AC_C_INLINE
 AC_C_STRINGIZE
 
 # check includes/headers
-AC_HEADER_STDC
+AC_INCLUDES_DEFAULT
 AC_CHECK_HEADERS(ctype.h errno.h fcntl.h libutil.h limits.h pty.h malloc.h \
 		 memory.h siginfo.h stdarg.h stdint.h stdlib.h string.h \
 		 strings.h stropts.h sys/resource.h sys/time.h \
@@ -96,7 +96,6 @@ fi
 dnl AC_FUNC_VPRINTF
 
 # type checks
-AC_TYPE_SIGNAL
 AC_TYPE_SIZE_T
 
 # Package-specific options/knobs

@@ -1054,7 +1054,7 @@ sub ShowFlash {
 	/\s+(private-multiple-fs|multiple-fs|LISP-MapCache-IPv\S+|nv_hdr)$/ &&
 	    next;
 
-	if (/(dhcp_[^. ]*\.txt|license_evlog|vlan\.dat|sflog|snooping)/ ||
+	if (/(dhcp_[^. ]*\.txt|license_evlog|\slog\s*$|vlan\.dat|sflog|snooping)/ ||
 		 /(LOCAL-CA-SERVER(?:[^\s]*))\s*$/ ||
 		 /(smart-log\/agentlog|syslog)\s*$/ ||
 		 /(log\/(?:ssp_tz\/)?[^. ]+\.log(?:\.[0-9]+\.gz)?)\s*$/) {
@@ -1230,14 +1230,21 @@ sub DirSlotN {
 	# to:
 	#       -rw-                                   vlan.dat
 	#       -rw-                                           vlan.dat
-	if (/(dhcp_[^. ]*\.txt|vlan\.dat|sflog|snooping|syslog)\s*$/ ||
-	    /(tracelogs|throughput_monitor_params|underlying-config)\s*$/) {
+	if (/(dhcp_[^. ]*\.txt|vlan\.dat|\slog|sflog|snooping|syslog)\s*$/ ||
+	    /(\sssd|tracelogs|throughput_monitor_params)\s*$/ ||
+	    /((?:private|startup|underlying)-config)\s*$/) {
 	    if (/(\s*\d+\s+)(\S+\s+)(\d+)(\s+)(\w+ \d+\s+\d+ \d+:\d+:\d+ .\d+:\d+)/) {
 		my($fn, $a, $sz, $c, $dt, $rem) = ($1, $2, $3, $4, $5, $');
 		my($fnl, $szl, $dtl) = (length($fn), length($sz), length($dt));
 		my($fmt) = "%s%-". $szl ."s%s%-". $dtl ."s%s";
 		$_ = sprintf($fmt, $a, "", $c, "", $rem);
 	    } elsif (/(\s*\d+\s+)(\S+\s+)(\d+)(\s+)(\w+ \d+\s+\d+ \d+:\d+:\d+)/) {
+		my($fn, $a, $sz, $c, $dt, $rem) = ($1, $2, $3, $4, $5, $');
+		my($fnl, $szl, $dtl) = (length($fn), length($sz), length($dt));
+		my($fmt) = "%s%-". $szl ."s%s%-". $dtl ."s%s";
+		$_ = sprintf($fmt, $a, "", $c, "", $rem);
+	    } elsif (/(\s*\d+\s+)(\S+\s+)(\d+)(\s+)(\d+:\d+:\d+ \w+ \d+\s+\d+)/) {
+		#  7      drwx  4096         16:43:28 Oct 08 2021  log
 		my($fn, $a, $sz, $c, $dt, $rem) = ($1, $2, $3, $4, $5, $');
 		my($fnl, $szl, $dtl) = (length($fn), length($sz), length($dt));
 		my($fmt) = "%s%-". $szl ."s%s%-". $dtl ."s%s";
@@ -2767,6 +2774,20 @@ TOP:
 	return(0);
     }
 
+    return(0);
+}
+
+# This routine processes a generic command, commenting all of its output
+sub RunCommandComment {
+    my($INPUT, $OUTPUT, $cmd) = @_;
+    print STDERR "    In RunCommandComment: $_" if ($debug);
+
+    while (<$INPUT>) {
+	tr/\015//d;
+	last if (/^$prompt/);
+	ProcessHistory("COMMENTS","keysort","_RCC","! $_");
+    }
+    ProcessHistory("COMMENTS","keysort","_RCC","!\n");
     return(0);
 }
 

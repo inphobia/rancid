@@ -76,6 +76,8 @@ TOP: while(<$INPUT>) {
 	    if (!defined($prompt)) {
 		$prompt = ($_ =~ /^([^#]+#)/)[0];
 		$prompt =~ s/([][}{)(\\])/\\$1/g;
+		# accept prompts like nexus on a ucs "routername(nexus)#"
+		$prompt =~ s/([#])$/(\\\([^)$1]+\\\))?\\$1/g;
 		print STDERR ("PROMPT MATCH: $prompt\n") if ($debug);
 	    }
 	    print STDERR ("HIT COMMAND:$_") if ($debug);
@@ -173,7 +175,18 @@ EndSoftware:
 	    }
 	}
 EndHardware:
-	if (/^\s+(bootflash|slot0):\s+(\d+) kB(.*)$/) {
+	if (/^\s+(bootflash):\s+(\d+) kB(.*)$/) {
+	    my($tmp) = int($2 / 1024);
+	    # CSCvz71586 accessing bootflash from multiple VDCs might return 0
+	    if ($2 == 0) {
+		print STDERR "ERROR: bootflash: size 0\n";
+		return(-1);
+	    }
+	    ProcessHistory("COMMENTS","keysort","B1",
+			   "!Memory: $1: $tmp MB$3\n");
+	    next;
+	}
+	if (/^\s+(slot0):\s+(\d+) kB(.*)$/) {
 	    my($tmp) = int($2 / 1024);
 	    ProcessHistory("COMMENTS","keysort","B1",
 			   "!Memory: $1: $tmp MB$3\n");
@@ -497,7 +510,7 @@ sub DirSlotN {
 
 	next if (/BufferMonitor-1HourData/);
 
-	if (/( debug_logs| log)\/$/) {
+	if (/( debug_logs| log| icamsql[^.]*\.db.*)\/$/) {
 	    # change
 	    #         8192    Jan 08 14:05:05 2015  log/
 	    # to

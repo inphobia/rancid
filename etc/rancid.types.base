@@ -210,6 +210,16 @@ cisco;command;ios::WriteTerm;show running-config view full;workaround for role-b
 cisco;command;ios::WriteTerm;show running-config
 cisco;command;ios::WriteTerm;write term
 #
+# cisoc NCS running ios-xe, eg: 4200
+cisco-ncs;script;rancid -t cisco-ncs
+cisco-ncs;login;clogin
+cisco-ncs;module;ios
+cisco-ncs;inloop;ios::inloop
+cisco-ncs;command;ios::ShowVersion;show version
+cisco-ncs;command;ios::ShowInventory;show inventory
+cisco-ncs;command;ios::RunCommandComment;show platform
+cisco-ncs;command;ios::WriteTerm;show running-config
+#
 ios-nx;alias;cisco-nx
 cisco-nx;script;rancid -t cisco-nx
 cisco-nx;login;clogin
@@ -252,7 +262,7 @@ cisco-nx;command;nxos::WriteTerm;show running-config
 #
 # Cisco small business devices.  These are peculiar; most likely this will not
 # work with all of them, but is also reported to work with other Marvell OEMs,
-# including PowerConnect 5448
+# including PowerConnect 5448, some Transition Networks switches
 ios-sb;alias;cisco-sb
 cisco-sb;script;rancid -t cisco-sb
 cisco-sb;login;csblogin
@@ -345,7 +355,7 @@ ios-exr;command;iosxr::ShowLicense;show license all
 ios-exr;command;iosxr::ShowHWfpd;show hw-module fpd;eXR LC images
 ios-exr;command;iosxr::ShowRedundancy;show redundancy
 ios-exr;command;iosxr::ShowInstallActive;show install active
-ios-exr;command;iosxr::ShowEnv;admin show env all
+ios-exr;command;iosxr::ShowEnv;admin show env power
 ios-exr;command;iosxr::DirSlotN;dir /all nvram:
 ios-exr;command;iosxr::DirSlotN;dir /all bootflash:
 ios-exr;command;iosxr::DirSlotN;dir /all compactflash:
@@ -668,6 +678,7 @@ junos;command;junos::ShowChassisSCB;show chassis feb detail
 junos;command;junos::ShowChassisSCB;show chassis feb
 junos;command;junos::ShowChassisSCB;show chassis cfeb
 junos;command;junos::ShowChassisAlarms;show chassis alarms
+junos;command;junos::ShowChassisAlarms;show system alarms
 junos;command;junos::ShowSystemLicense;show system license
 junos;command;junos::ShowSystemBootMessages;show system boot-messages
 junos;command;junos::ShowSystemCoreDumps;show system core-dumps
@@ -696,6 +707,7 @@ junos-evo;command;junos::ShowChassisSCB;show chassis feb detail
 junos-evo;command;junos::ShowChassisSCB;show chassis feb
 junos-evo;command;junos::ShowChassisSCB;show chassis cfeb
 junos-evo;command;junos::ShowChassisAlarms;show chassis alarms
+junos-evo;command;junos::ShowChassisAlarms;show system alarms
 # XXX this has a different format in EVO & might need oscillation fixes
 junos-evo;command;junos::ShowSystemLicense;show system license
 # XXX this command does not work properly
@@ -724,6 +736,7 @@ juniper-srx;command;junos::ShowChassisSCB;show chassis feb detail
 juniper-srx;command;junos::ShowChassisSCB;show chassis feb
 juniper-srx;command;junos::ShowChassisSCB;show chassis cfeb
 juniper-srx;command;junos::ShowChassisAlarms;show chassis alarms
+juniper-srx;command;junos::ShowChassisAlarms;show system alarms
 juniper-srx;command;junos::ShowSystemLicense;show system license
 juniper-srx;command;junos::ShowSystemLicense;show system license keys
 juniper-srx;command;junos::ShowSystemBootMessages;show system boot-messages
@@ -752,6 +765,7 @@ juniper-srx;command;junos::ShowConfiguration;show configuration switch-options
 juniper-srx;command;junos::ShowConfiguration;show configuration system
 juniper-srx;command;junos::ShowConfiguration;show configuration vlans
 #
+# Mikrotik routerOS
 mikrotik;alias;routeros
 routeros;script;rancid -t routeros
 routeros;login;mtlogin
@@ -761,6 +775,26 @@ routeros;command;routeros::SystemPackagePrintDetail;system package print detail 
 routeros;command;routeros::SystemRouterboardPrint;system routerboard print
 routeros;command;routeros::SystemLicensePrint;system license print
 routeros;command;routeros::Export;export
+# Mikrotik routerOS - terse (ie commands)
+mikrotik-terse;alias;routeros-terse
+routeros-terse;script;rancid -t routeros-terse
+routeros-terse;login;mtlogin
+routeros-terse;module;routeros
+routeros-terse;inloop;routeros::inloop
+routeros-terse;command;routeros::SystemPackagePrintDetail;system package print detail without-paging
+routeros-terse;command;routeros::SystemRouterboardPrint;system routerboard print
+routeros-terse;command;routeros::SystemLicensePrint;system license print
+routeros-terse;command;routeros::Export;export terse
+# Mikrotik routerOS - verbose
+mikrotik-verbose;alias;routeros-verbose
+routeros-verbose;script;rancid -t routeros-verbose
+routeros-verbose;login;mtlogin
+routeros-verbose;module;routeros
+routeros-verbose;inloop;routeros::inloop
+routeros-verbose;command;routeros::SystemPackagePrintDetail;system package print detail without-paging
+routeros-verbose;command;routeros::SystemRouterboardPrint;system routerboard print
+routeros-verbose;command;routeros::SystemLicensePrint;system license print
+routeros-verbose;command;routeros::Export;export verbose
 #
 mrtd;script;mrancid
 mrtd;login;clogin
@@ -793,6 +827,18 @@ paloalto;inloop;panos::inloop
 paloalto;command;panos::ShowInfo;show system info
 paloalto;command;panos::ShowInventory;show chassis inventory
 paloalto;command;panos::ShowConfig;show config running
+#
+# XML configuration version of paloalto.
+# XML is possibly the only format that can be loaded   See mail:
+# https://shrubbery.net/pipermail/rancid-discuss/2021-September/011073.html
+paloaltoxml;script;rancid -t paloaltoxml
+paloaltoxml;login;panlogin
+paloaltoxml;module;panos
+paloaltoxml;inloop;panos::inloop
+paloaltoxml;command;panos::ShowInfo;show system info
+paloaltoxml;command;panos::ShowInventory;show chassis inventory
+paloaltoxml;command;rancid::RunCommand;set cli op-command-xml-output on
+paloaltoxml;command;panos::ShowConfig;show config running
 #
 redback;script;rrancid
 redback;login;clogin
@@ -835,6 +881,7 @@ sros;inloop;sros::inloop
 sros;command;sros::ShowSystemInfo;show system information
 sros;command;sros::ShowRedundancy;show redundancy synchronization
 sros;command;sros::ShowChassis;show chassis
+sros;command;sros::ShowMDA;show mda detail
 sros;command;sros::ShowChassisEnv;show chassis environment
 sros;command;sros::ShowChassisPS;show chassis power-supply
 sros;command;sros::ShowChassisPM;show chassis power-management
@@ -851,14 +898,17 @@ sros-md;script;rancid -t sros-md
 sros-md;login;noklogin
 sros-md;module;sros
 sros-md;inloop;sros::inloop
+sros-md;command;rancid::RunCommand;environment progress-indicator admin-state disable
 sros-md;command;sros::ShowSystemInfo;show system information
 sros-md;command;sros::ShowRedundancy;show redundancy synchronization
 sros-md;command;sros::ShowChassis;show chassis
+sros-md;command;sros::ShowMDA;show mda detail
 sros-md;command;sros::ShowChassisEnv;show chassis environment
 sros-md;command;sros::ShowChassisPS;show chassis power-supply
 sros-md;command;sros::ShowChassisPM;show chassis power-management
 sros-md;command;sros::ShowCardState;show card state
 sros-md;command;sros::ShowCardDetail;show card detail
+sros-md;command;sros::ShowPortDetail;show port detail
 sros-md;command;sros::ShowDebug;//show debug
 sros-md;command;sros::ShowBOF;//show bof
 sros-md;command;sros::WriteTermMD;admin show configuration
