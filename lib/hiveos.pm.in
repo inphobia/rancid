@@ -5,7 +5,8 @@ package hiveos;
 #
 # RANCID - Really Awesome New Cisco confIg Differ
 #
-# hiveos.pm - aerohive hiveos rancid procedures
+# hiveos.pm - aerohive hiveos and extreme networks
+# iq engine rancid procedures
 #
 # based on iossb.pm.in revision 3472 &
 # nxos.pm.in version 3843
@@ -13,6 +14,7 @@ package hiveos;
 # done by nick.nauwelaerts@aquafin.be
 #
 # tested on configs pushed by extremecloud iq 21.1.20.27-IQVA:
+# and extremecloud iq 24.4.0.61 cloud version
 #   model ap121, hiveos version 6.5r8a
 #   model ap121, hiveos version 6.5r8b
 #   model ap121, hiveos version 6.5r9
@@ -33,9 +35,14 @@ package hiveos;
 #   model ap250, hiveos version 8.4r7
 #   model ap250, hiveos version 8.4r11
 #   model ap250, hiveos version 10.0r10b
+#   model ap410c, hiveos / iq engine version 10.6r6
 #
 # hiveos cli references can be found here
 # https://docs.aerohive.com/330000/docs/help/english/ng/Content/reference/docs/cli-reference-guides.htm
+#
+# a complete list excluding hidden commands can ben found by
+# running this on the cli:
+# show cmds
 
 
 use 5.010;

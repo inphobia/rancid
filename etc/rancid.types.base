@@ -691,7 +691,7 @@ fxos;command;fxos::WriteTerm;show configuration
 hitachi;script;htrancid
 hitachi;login;htlogin
 #
-# aerohive hiveos
+# aerohive hiveos and extreme networks iq engine
 hiveos;script;rancid -t hiveos
 hiveos;login;clogin
 hiveos;module;hiveos
