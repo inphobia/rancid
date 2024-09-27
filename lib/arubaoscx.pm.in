@@ -1,10 +1,11 @@
 package arubaoscx;
 ##
 ## @PACKAGE@ @VERSION@
+@copyright@
 #
-#  RANCID - Really Awesome New Cisco confIg Differ
+# RANCID - Really Awesome New Cisco confIg Differ
 #
-# arubaoscx.pm - Aruba OSCX switches
+# arubaoscx.pm - ArubaOS-CX switches
 #
 # Contributed by J R Binks <jrbinks+rancid@gmail.com>
 # modified by nick.nauwelaerts@aquafin.be
