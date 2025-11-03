@@ -1,3 +1,15 @@
+3.14.99
+	junos.pm: fail collection on syslog garbage in output.  Probably an
+	ugly stack trace.
+
+	junos.pm: add l3vpn and more bandwidth license info and alarms
+	to filters
+
+	junos.pm: add firewall and port bandwidth license info and alarms
+	to filters
+
+	arbor.pm: retry the config collection if there is an API error
+
 3.14
 	fortigate.pm: GetSystem(): filter Proxy-APP-DB & Proxy-IPS-ETDB - Chris
 	Wopat
